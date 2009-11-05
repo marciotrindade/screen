@@ -1,23 +1,24 @@
 jQuery.extend({
 	screenOpen: function() {
 		jQuery('<div></div>').attr({id: '__screen'}).css({
-			 width: '100%'
-			,height: $(document).height() + 'px'
+			background: '#000'
+			,width: jQuery(document).width() + 'px'
+			,height: jQuery(document).height() + 'px'
 			,position: 'absolute'
 			,top: 0
 			,left: 0
 			,zIndex: 199
-			,opacity: 0.8
-			,background: '#000'
+			,opacity: 0.5
 		}).appendTo(document.body).click(function(e) {
 			e.preventDefault();
-			$.closeWindow();
+			jQuery.closeWindow();
 		});
 		
-		if($.browser.msie && $.browser.version < 7){
+		if(jQuery.browser.msie && jQuery.browser.version < 7){
 			jQuery("select").css({visibility:"hidden"});
 		}
 		
+		// press esc to close
 		document.onkeydown = function(e){
 			if (e == null) { // ie
 				keycode = event.keyCode;
@@ -31,41 +32,30 @@ jQuery.extend({
 	},
 	
 	screenClose: function() {
-		if($.browser.msie && $.browser.version < 7){
+		if(jQuery.browser.msie && jQuery.browser.version < 7){
 			jQuery("select").css({visibility:"visible"});
 		}
 		jQuery('#__screen').remove();
-		clearInterval(screen_time_out);
-	},
-	
-	screenResize: function(obj){
-		obj.show();
-		var width = obj.width();
-		var height = obj.height();
-		obj.hide();
-		
-		var top = (((jQuery(window).height()/2 - height/2)) + jQuery(window).scrollTop());
-		top = 30 + jQuery(window).scrollTop();
-		
-		$("#TB_window").css({
-			top: top,
-			left: (jQuery(window).width()/2 - width/2),
-			width: width + 'px',
-			height: height + 'px'
-		});
-		obj.fadeIn(800);
 	},
 	
 	openWindow: function(width, height, title, content){
 		jQuery.screenOpen();
 		jQuery('<div></div>').attr({id: 'TB_window'}).css({
 			position: 'absolute'
-			,top: (((jQuery(window).height()/2 - height/2)) + jQuery(window).scrollTop()) + "px"
-			,left: (jQuery(window).width()/2 - width/2) + "px"
-			,width: width + 'px'
+			,top: (((jQuery(window).height()/2 - height/2)) + jQuery(window).scrollTop())
+			,left: (jQuery(window).width()/2 - width/2)
+			,width: width + 5 + 'px'
+			,height: height + 30 + 'px'
+			,zIndex: 200
+		}).appendTo(document.body);
+		
+		jQuery('<div id="TB_title"><div id="TB_ajaxWindowTitle">'+title+'</div><div id="TB_closeAjaxWindow"><a href="#" id="TB_closeWindowButton">close</a> or Esc Key</div></div>').appendTo('#TB_window');
+		jQuery('#TB_closeWindowButton').click(function(){jQuery.closeWindow();return false;});
+		
+		jQuery('<div></div>').attr({id: 'TB_ajaxContent'}).css({
+			width: width + 'px'
 			,height: height + 'px'
-			,zIndex: 99999
-		}).appendTo(document.body).html(content);
+		}).html(content).appendTo('#TB_window');
 	},
 	
 	closeWindow: function(){
@@ -73,12 +63,9 @@ jQuery.extend({
 		jQuery.screenClose();
 	}
 });
-var screen_time_out;
 jQuery.fn.scrollTop = function() {
 	if ( this[0] == window || this[0] == document ){
-		return self.pageYOffset ||
-			jQuery.boxModel && document.documentElement.scrollTop ||
-			document.body.scrollTop;
+		return self.pageYOffset || jQuery.boxModel && document.documentElement.scrollTop || document.body.scrollTop;
 	}
 	return this[0].scrollTop;
 };
