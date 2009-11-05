@@ -1,17 +1,17 @@
 How to use:
 
-<pre>$.openWindow(400, 200, "Test", "<p>Test</p>");</pre>
+$.openWindow(400, 200, "Test", "<p>Test</p>");
 
 How to use with a link:
 
-<pre>$(".screen").click(function(e) {
+$(".screen").click(function(e) {
 	e.preventDefault();
 	$.openWindow(400, 200, "Test", $("#extra").html);
-});</pre>
+});
 
 How to use with ajax:
 
-<pre>$(".screen").click(function(e) {
+$(".screen").click(function(e) {
 	e.preventDefault();
 	$.ajax({
 		type:'GET',
@@ -20,4 +20,4 @@ How to use with ajax:
 			$.openWindow(400, 200, "Test", data);
 		}
 	});
-});</pre>
+});
